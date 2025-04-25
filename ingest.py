@@ -6,7 +6,10 @@ import faiss
 import numpy as np
 
 class DocumentIngester:
-    def __init__(self, data_dir: str = "data", vector_store_dir: str = "vector_store"):
+    def __init__(self, data_dir: str = None, vector_store_dir: str = "vector_store"):
+        if data_dir is None:
+            # Always use backend/data relative to this file
+            data_dir = os.path.join(os.path.dirname(__file__), 'data')
         self.data_dir = data_dir
         self.vector_store_dir = vector_store_dir
         self.vectorizer = TfidfVectorizer()
@@ -14,7 +17,7 @@ class DocumentIngester:
         self.document_metadata: List[Dict] = []
         
         # Create directories if they don't exist
-        os.makedirs(data_dir, exist_ok=True)
+        os.makedirs(self.data_dir, exist_ok=True)
         os.makedirs(vector_store_dir, exist_ok=True)
 
     def load_documents(self):
