@@ -74,6 +74,7 @@ def upload_txt_file():
     file.save(save_path)
     # Optionally, trigger ingestion here
     os.system(f'python {os.path.join(os.path.dirname(__file__), "ingest.py")}')
+    rag_bot.retriever.load_artifacts()  # Reload vector store after ingestion
     return jsonify({'success': True, 'filename': file.filename})
 
 @app.route('/files/append', methods=['POST'])
