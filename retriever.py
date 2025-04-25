@@ -64,8 +64,6 @@ class DocumentRetriever:
                 try:
                     # Ensure absolute path for file reading
                     file_path = doc_info['file_path']
-                    if not os.path.isabs(file_path):
-                        file_path = os.path.join(os.path.dirname(__file__), 'data', os.path.basename(file_path))
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read()
                         relevant_docs.append({

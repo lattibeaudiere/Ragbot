@@ -33,7 +33,7 @@ class DocumentIngester:
                             content = f.read()
                             self.documents.append(content)
                             self.document_metadata.append({
-                                'file_path': file_path,
+                                'file_path': os.path.abspath(file_path),
                                 'file_name': file
                             })
                     except Exception as e:
