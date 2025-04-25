@@ -4,3 +4,5 @@ gunicorn
 aiohttp
 python-dotenv
 faiss-cpu
+scikit-learn
+pickle-mixin
