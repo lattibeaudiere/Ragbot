@@ -20,7 +20,8 @@ class DocumentRetriever:
             if os.path.exists(index_path):
                 self.index = faiss.read_index(index_path)
             else:
-                raise FileNotFoundError("FAISS index not found")
+                print("FAISS index not found. Retrieval will be unavailable until files are ingested.")
+                self.index = None
 
             # Load vectorizer
             vectorizer_path = os.path.join(self.vector_store_dir, "vectorizer.pkl")
@@ -28,7 +29,7 @@ class DocumentRetriever:
                 with open(vectorizer_path, 'rb') as f:
                     self.vectorizer = pickle.load(f)
             else:
-                raise FileNotFoundError("Vectorizer not found")
+                self.vectorizer = None
 
             # Load metadata
             metadata_path = os.path.join(self.vector_store_dir, "metadata.pkl")
@@ -36,11 +37,13 @@ class DocumentRetriever:
                 with open(metadata_path, 'rb') as f:
                     self.document_metadata = pickle.load(f)
             else:
-                raise FileNotFoundError("Metadata not found")
+                self.document_metadata = None
 
         except Exception as e:
             print(f"Error loading artifacts: {str(e)}")
-            raise
+            self.index = None
+            self.vectorizer = None
+            self.document_metadata = None
 
     def retrieve_documents(self, query: str, k: int = 3) -> List[Dict]:
         """
@@ -48,7 +51,8 @@ class DocumentRetriever:
         Returns a list of dictionaries containing document content and metadata
         """
         if not self.index or not self.vectorizer or not self.document_metadata:
-            raise ValueError("Artifacts not properly loaded")
+            print("Vector store not initialized. No documents available for retrieval.")
+            return []
 
         # Convert query to embedding
         query_embedding = self.vectorizer.transform([query]).toarray().astype('float32')
