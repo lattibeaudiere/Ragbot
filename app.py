@@ -13,7 +13,7 @@ import asyncio
 app = Flask(__name__)
 CORS(app)
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 os.makedirs(DATA_DIR, exist_ok=True)
 
 # Load both chatbot systems once
@@ -70,6 +70,7 @@ def upload_txt_file():
     if file.filename == '' or not file.filename.endswith('.txt'):
         return jsonify({'error': 'Invalid file name'}), 400
     save_path = os.path.join(DATA_DIR, file.filename)
+    print(f"Saving uploaded file to: {save_path}")
     file.save(save_path)
     # Optionally, trigger ingestion here
     os.system(f'python {os.path.join(os.path.dirname(__file__), "ingest.py")}')
