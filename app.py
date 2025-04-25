@@ -72,7 +72,7 @@ def upload_txt_file():
     save_path = os.path.join(DATA_DIR, file.filename)
     file.save(save_path)
     # Optionally, trigger ingestion here
-    os.system(f'python ../ingest.py')
+    os.system(f'python {os.path.join(os.path.dirname(__file__), "ingest.py")}')
     return jsonify({'success': True, 'filename': file.filename})
 
 @app.route('/files/append', methods=['POST'])
@@ -88,7 +88,7 @@ def append_to_txt_file():
     with open(file_path, 'a', encoding='utf-8') as f:
         f.write('\n' + content)
     # Optionally, trigger ingestion here
-    os.system(f'python ../ingest.py')
+    os.system(f'python {os.path.join(os.path.dirname(__file__), "ingest.py")}')
     return jsonify({'success': True, 'filename': filename})
 
 @app.route('/health', methods=['GET'])
