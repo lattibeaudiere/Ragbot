@@ -14,6 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
+os.makedirs(DATA_DIR, exist_ok=True)
 
 # Load both chatbot systems once
 rag_bot = RAGChatbot()
