@@ -24,12 +24,17 @@ class RAGChatbot:
         context = "Relevant information from the knowledge base:\n\n"
         for doc in documents:
             context += f"From {doc['file_name']}:\n{doc['content']}\n\n"
+        # Log the context for debugging (show only first 500 chars)
+        print("[RAGChatbot] Context sent to LLM (first 500 chars):\n", context[:500])
         return context
 
     async def get_response(self, user_message: str) -> str:
         """Get response from the LLM with RAG context"""
         # Retrieve relevant documents
         relevant_docs = self.retriever.retrieve_documents(user_message)
+        print(f"[RAGChatbot] Retrieved {len(relevant_docs)} docs for query: {user_message}")
+        for doc in relevant_docs:
+            print(f"[RAGChatbot] Doc: {doc['file_name']} - First 100 chars: {doc['content'][:100]}")
         context = self._format_context(relevant_docs)
 
         # Add context to the user message
